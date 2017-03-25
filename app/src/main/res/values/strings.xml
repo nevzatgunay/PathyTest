@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">Pathy</string>
+    <string name="app_name">PATHY</string>
+    <string name="search">Search</string>
+    <string name="preferences">Preferences</string>
+    <string name="my_profile">My Profile</string>
+    <string name="one">One</string>
+    <string name="two">Two</string>
+    <string name="three">Three</string>
 </resources>

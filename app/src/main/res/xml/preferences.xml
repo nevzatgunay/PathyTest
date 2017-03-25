@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Notification"
+        android:key="notify_category">
+
+        <CheckBoxPreference
+            android:key="perform_notify"
+            android:summary="This option if selected will allow the application to inform you for latest travels."
+            android:title="Latest Travels"
+            android:defaultValue="true"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="The App"
+        android:key="personal_category">
+
+        <ListPreference     android:title="Version"
+            android:summary="Select the kind of data that you would like to download"
+            android:key="downloadType"
+            android:defaultValue="1"
+            android:entries="@array/listArray"
+            android:entryValues="@array/listValues" />
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

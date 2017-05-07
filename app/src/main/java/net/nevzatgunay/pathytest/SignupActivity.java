@@ -5,6 +5,8 @@ package net.nevzatgunay.pathytest;
  */
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -47,7 +49,10 @@ public class SignupActivity extends AppCompatActivity {
                 finish();
             }
         });
+
     }
+
+
 
     public void signup() {
         Log.d(TAG, "Signup");
@@ -62,7 +67,7 @@ public class SignupActivity extends AppCompatActivity {
         final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
                 R.style.AppTheme_NoActionBar);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Creating Account...");
+        progressDialog.setMessage("Verification code was send to your IZTECH e-mail address...");
         progressDialog.show();
 
         String name = _nameText.getText().toString();
@@ -75,16 +80,24 @@ public class SignupActivity extends AppCompatActivity {
 
 
         new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
+                    new Runnable() {
+                        public void run() {
 
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+                            // On complete call either onSignupSuccess or onSignupFailed
+                            // depending on success
+                            onSignupSuccess();
+                            // onSignupFailed();
+                            progressDialog.dismiss();
+                        }
+                    }, 3000);
+
+
+
+
+
+
+
+
     }
 
 
@@ -115,7 +128,7 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("enter a valid email address");
+            _emailText.setError("enter a valid IZTECH email address");
             valid = false;
         } else {
             _emailText.setError(null);

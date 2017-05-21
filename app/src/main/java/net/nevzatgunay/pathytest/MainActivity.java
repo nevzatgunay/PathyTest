@@ -39,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this,IntroActivity.class);
         startActivity(intent);
 
-
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -132,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_my_profile:
-                startActivity (new Intent (this, SettingsActivity.class));
+                startActivity (new Intent (this, MyProfile.class));
                 return true;
 
             case R.id.action_search:

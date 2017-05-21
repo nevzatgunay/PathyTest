@@ -6,4 +6,5 @@
     <string name="one">One</string>
     <string name="two">Two</string>
     <string name="three">Three</string>
+    <string name="date_selected"></string>
 </resources>

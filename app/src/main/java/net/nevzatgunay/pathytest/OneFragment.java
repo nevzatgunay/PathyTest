@@ -4,12 +4,15 @@ package net.nevzatgunay.pathytest;
  * Created by Nevzat on 3/22/2017.
  */
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -48,15 +51,34 @@ public class OneFragment extends Fragment implements OnItemClickListener{
 
         listView.setOnItemClickListener(this);
 
+        /*
+        Button button= (Button) view.findViewById(R.id.add_btn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        */
+
+        FloatingActionButton myFab = (FloatingActionButton) view.findViewById(R.id.floatButton);
+        myFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent myIntent = new Intent(getActivity(), PostActivity.class);
+                startActivity(myIntent);
+            }
+        });
+
         // Inflate the layout for this fragment
         return view;
     }
 
     @Override
     public void onItemClick(AdapterView<?> adapter, View arg1, int position, long arg3) {
-        // TODO Auto-generated method stub
-        String item = adapter.getItemAtPosition(position).toString();
-        Toast.makeText(getActivity().getApplicationContext(), "CLICK: " + item, Toast.LENGTH_SHORT).show();
+        //Intent myIntent = new Intent(getActivity(), ApplyActivity.class);
+        //startActivity(myIntent);
+
+
     }
 
     private void sendRequest(){
@@ -82,7 +104,7 @@ public class OneFragment extends Fragment implements OnItemClickListener{
     private void showJSON(String json){
         ParseJSON pj = new ParseJSON(json);
         pj.parseJSON();
-        CustomList cl = new CustomList(getActivity(), ParseJSON.ids,ParseJSON.names,ParseJSON.emails);
+        CustomList cl = new CustomList(getActivity(), ParseJSON.emails,ParseJSON.froms,ParseJSON.tos,ParseJSON.dates,ParseJSON.times,ParseJSON.prices);
         listView.setAdapter(cl);
     }
 

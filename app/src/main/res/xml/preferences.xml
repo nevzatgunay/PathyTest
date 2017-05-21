@@ -12,18 +12,4 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="The App"
-        android:key="personal_category">
-
-        <ListPreference     android:title="Version"
-            android:summary="Select the kind of data that you would like to download"
-            android:key="downloadType"
-            android:defaultValue="1"
-            android:entries="@array/listArray"
-            android:entryValues="@array/listValues" />
-
-
-    </PreferenceCategory>
-
 </PreferenceScreen>

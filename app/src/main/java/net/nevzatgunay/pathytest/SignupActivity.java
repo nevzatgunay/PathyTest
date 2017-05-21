@@ -91,13 +91,6 @@ public class SignupActivity extends AppCompatActivity {
                         }
                     }, 3000);
 
-
-
-
-
-
-
-
     }
 
 

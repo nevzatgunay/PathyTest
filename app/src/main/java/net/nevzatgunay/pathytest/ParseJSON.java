@@ -9,14 +9,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ParseJSON {
-    public static String[] ids;
-    public static String[] names;
     public static String[] emails;
+    public static String[] froms;
+    public static String[] tos;
+    public static String[] dates;
+    public static String[] times;
+    public static String[] prices;
+
 
     public static final String JSON_ARRAY = "result";
-    public static final String KEY_ID = "mail";
-    public static final String KEY_NAME = "password";
-    public static final String KEY_EMAIL = "phone";
+    public static final String KEY_MAIL = "mail";
+    public static final String KEY_FROM = "from";
+    public static final String KEY_TO = "to";
+    public static final String KEY_DATE = "date";
+    public static final String KEY_TIME = "time";
+    public static final String KEY_PRICE = "price";
 
     private JSONArray users = null;
 
@@ -32,15 +39,21 @@ public class ParseJSON {
             jsonObject = new JSONObject(json);
             users = jsonObject.getJSONArray(JSON_ARRAY);
 
-            ids = new String[users.length()];
-            names = new String[users.length()];
             emails = new String[users.length()];
+            froms = new String[users.length()];
+            tos = new String[users.length()];
+            dates = new String[users.length()];
+            times = new String[users.length()];
+            prices = new String[users.length()];
 
             for(int i=0;i<users.length();i++){
                 JSONObject jo = users.getJSONObject(i);
-                ids[i] = jo.getString(KEY_ID);
-                names[i] = jo.getString(KEY_NAME);
-                emails[i] = jo.getString(KEY_EMAIL);
+                emails[i] = jo.getString(KEY_MAIL);
+                froms[i] = jo.getString(KEY_FROM);
+                tos[i] = jo.getString(KEY_TO);
+                dates[i] = jo.getString(KEY_DATE);
+                times[i] = jo.getString(KEY_TIME);
+                prices[i] = jo.getString(KEY_PRICE);
             }
         } catch (JSONException e) {
             e.printStackTrace();

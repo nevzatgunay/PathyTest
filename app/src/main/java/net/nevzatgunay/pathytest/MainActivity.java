@@ -28,16 +28,29 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
+    public static boolean intro=false;
+    public static boolean session=false;
+    public static boolean check=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.activity_main);
 
-        startActivity(new Intent(this,LoginActivity.class));
+        if (SignupActivity.signup){
+            startActivity(new Intent(this,AccountCheckActivity.class));
+        }
 
-        Intent intent = new Intent(this,IntroActivity.class);
-        startActivity(intent);
+        if(!session){
+            startActivity(new Intent(this,LoginActivity.class));
+        }
+
+        if(!intro){
+            intro=true;
+            Intent intent = new Intent(this,IntroActivity.class);
+            startActivity(intent);
+        }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -127,10 +140,6 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_preferences:
                 startActivity (new Intent (this, SettingsActivity.class));
-                return true;
-
-            case R.id.action_my_profile:
-                startActivity (new Intent (this, MyProfile.class));
                 return true;
 
             case R.id.action_search:

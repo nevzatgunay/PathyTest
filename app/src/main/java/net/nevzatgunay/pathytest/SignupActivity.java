@@ -16,6 +16,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.apache.http.client.methods.HttpPost;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -29,11 +42,18 @@ public class SignupActivity extends AppCompatActivity {
     @InjectView(R.id.btn_signup) Button _signupButton;
     @InjectView(R.id.link_login) TextView _loginLink;
 
+    RequestQueue requestQueue;
+    String insertUrl = "http://10.0.3.2/Pathy/insertUser.php";
+
+    public static boolean signup=false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         ButterKnife.inject(this);
+
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
 
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +70,8 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
 
 
@@ -64,32 +86,40 @@ public class SignupActivity extends AppCompatActivity {
 
         _signupButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
-                R.style.AppTheme_NoActionBar);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Verification code was send to your IZTECH e-mail address...");
-        progressDialog.show();
+        insertData();
 
-        String name = _nameText.getText().toString();
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
-        String phone = _phoneText.getText().toString();
-
-        // TODO: Implement your own signup logic here.
+        onSignupSuccess();
 
 
+    }
 
-        new android.os.Handler().postDelayed(
-                    new Runnable() {
-                        public void run() {
+    public void insertData(){
+        StringRequest request = new StringRequest(Request.Method.POST, insertUrl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
 
-                            // On complete call either onSignupSuccess or onSignupFailed
-                            // depending on success
-                            onSignupSuccess();
-                            // onSignupFailed();
-                            progressDialog.dismiss();
-                        }
-                    }, 3000);
+                System.out.println(response.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> parameters  = new HashMap<String, String>();
+                parameters.put("name",_nameText.getText().toString());
+                parameters.put("mail",_emailText.getText().toString());
+                parameters.put("phone",_phoneText.getText().toString());
+                parameters.put("password",_passwordText.getText().toString());
+
+                return parameters;
+            }
+        };
+        requestQueue.add(request);
+
 
     }
 
@@ -97,6 +127,7 @@ public class SignupActivity extends AppCompatActivity {
     public void onSignupSuccess() {
         _signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
+        signup=true;
         finish();
     }
 

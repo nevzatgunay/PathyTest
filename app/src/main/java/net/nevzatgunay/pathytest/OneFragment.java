@@ -13,10 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
@@ -24,6 +28,11 @@ import com.android.volley.toolbox.Volley;
 import com.android.volley.VolleyError;
 
 import net.nevzatgunay.pathytest.R;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import butterknife.InjectView;
 
 public class OneFragment extends Fragment implements OnItemClickListener{
 
@@ -33,6 +42,16 @@ public class OneFragment extends Fragment implements OnItemClickListener{
 
     public static final String JSON_URL = "http://10.0.3.2/Pathy/getData.php";
     private ListView listView;
+
+    RequestQueue requestQueue;
+    String insertUrl = "http://10.0.3.2/Pathy/insertApply.php";
+
+    @InjectView(R.id.textViewEMail) TextView textViewEMail;
+    @InjectView(R.id.textViewFrom) TextView textViewFrom;
+    @InjectView(R.id.textViewTo) TextView textViewTo;
+    @InjectView(R.id.textViewDate) TextView textViewDate;
+    @InjectView(R.id.textViewTime) TextView textViewTime;
+    @InjectView(R.id.textViewPrice) TextView textViewPrice;
 
 
     @Override
@@ -45,21 +64,50 @@ public class OneFragment extends Fragment implements OnItemClickListener{
                              Bundle savedInstanceState) {
         View view =inflater.inflate(R.layout.fragment_one, container, false);
 
+        requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+
         listView = (ListView) view.findViewById(R.id.listView);
 
         sendRequest();
 
         listView.setOnItemClickListener(this);
 
-        /*
+
         Button button= (Button) view.findViewById(R.id.add_btn);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                StringRequest request = new StringRequest(Request.Method.POST, insertUrl, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        System.out.println(response.toString());
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String,String> parameters  = new HashMap<String, String>();
+                        parameters.put("from",textViewFrom.getText().toString());
+                        parameters.put("to",textViewTo.getText().toString());
+                        parameters.put("date",textViewDate.getText().toString());
+                        parameters.put("price",textViewPrice.getText().toString());
+                        parameters.put("time",textViewTime.getText().toString());
+
+                        return parameters;
+                    }
+                };
+                requestQueue.add(request);
+
 
             }
         });
-        */
+
 
         FloatingActionButton myFab = (FloatingActionButton) view.findViewById(R.id.floatButton);
         myFab.setOnClickListener(new View.OnClickListener() {
@@ -75,9 +123,6 @@ public class OneFragment extends Fragment implements OnItemClickListener{
 
     @Override
     public void onItemClick(AdapterView<?> adapter, View arg1, int position, long arg3) {
-        //Intent myIntent = new Intent(getActivity(), ApplyActivity.class);
-        //startActivity(myIntent);
-
 
     }
 

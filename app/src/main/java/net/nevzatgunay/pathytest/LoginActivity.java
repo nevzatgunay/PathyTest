@@ -16,6 +16,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -31,6 +41,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_login);
         ButterKnife.inject(this);
 
@@ -63,28 +75,54 @@ public class LoginActivity extends AppCompatActivity {
 
         _loginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme_NoActionBar);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
 
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
-
-        // TODO: Implement your own authentication logic here.
+        getData();
 
 
+    }
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
+    private void getData() {
+
+        String url = Config.DATA_URL+_emailText.getText().toString().trim()+"&password="+_passwordText.getText().toString().trim();
+
+        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                showJSON(response);
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(LoginActivity.this,error.getMessage().toString(),Toast.LENGTH_LONG).show();
                     }
-                }, 3000);
+                });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    private void showJSON(String response){
+        String mail="";
+        String password="";
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray result = jsonObject.getJSONArray(Config.JSON_ARRAY);
+            JSONObject collegeData = result.getJSONObject(0);
+            mail = collegeData.getString(Config.KEY_MAIL);
+            password = collegeData.getString(Config.KEY_PASSWORD);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if(mail.equals(_emailText.getText().toString().trim()) && password.equals(_passwordText.getText().toString().trim())){
+            MainActivity.session=true;
+            onLoginSuccess();
+        }else{
+            MainActivity.session=false;
+            onLoginFailed();
+        }
     }
 
 
@@ -95,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 // TODO: Implement successful signup logic here
                 // By default we just finish the Activity and log them in automatically
-
+                SignupActivity.signup=true;
 
                 this.finish();
             }
